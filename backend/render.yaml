@@ -1,0 +1,20 @@
+# Render Deployment Configuration
+# This file is referenced by Render's build process
+
+# Python version
+runtime.txt content (if needed):
+python-3.13.0
+
+# For render.yaml (optional - advanced configuration):
+# services:
+#   - type: web
+#     name: smart-tourist-safety-api
+#     env: python
+#     plan: free
+#     buildCommand: pip install -r requirements.txt
+#     startCommand: gunicorn main:app
+#     envVars:
+#       - key: MONGODB_URL
+#         sync: false
+#       - key: JWT_SECRET
+#         sync: false
