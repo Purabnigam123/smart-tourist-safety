@@ -1,3 +1,16 @@
+// Bulk upload geofences via Excel file
+export async function bulkUploadGeofences(file, token) {
+  const formData = new FormData();
+  formData.append("file", file);
+  const res = await fetch(`${BASE_URL}/api/admin/geofence/bulk_upload`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+  return res.json();
+}
 const BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
 
 export async function registerTourist(data) {

@@ -9,5 +9,8 @@ pymongo
 pytest
 httpx
 mongomock
+
 python-multipart
 python-dotenv
+pandas
+openpyxl

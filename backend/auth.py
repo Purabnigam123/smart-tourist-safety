@@ -1,3 +1,16 @@
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+def get_current_admin(token: str = Depends(oauth2_scheme)):
+    payload = verify_token(token)
+    if not payload or payload.get("role") not in ("admin", "super_admin", "org_admin"):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated as admin",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return payload
 import hashlib
 from datetime import datetime, timedelta
 from typing import Optional

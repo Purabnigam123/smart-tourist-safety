@@ -14,6 +14,7 @@ import {
   updateSOSStatus,
   updateMessageStatus,
 } from "../../services/authApi";
+import { bulkUploadGeofences } from "../../services/api";
 import { Circle, MapContainer, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -212,6 +213,28 @@ export default function AdminDashboard() {
   });
   const [zoneSearch, setZoneSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [excelFile, setExcelFile] = useState(null);
+
+  const handleBulkUpload = async () => {
+    if (!excelFile) {
+      alert("Please select an Excel file to upload.");
+      return;
+    }
+    setCreatingFence(true);
+    try {
+      const res = await bulkUploadGeofences(excelFile, token);
+      if (res && res.message) {
+        alert(res.message);
+        // Optionally reload geofences
+        loadData && loadData();
+      } else {
+        alert("Upload failed. Please check your file format.");
+      }
+    } catch (err) {
+      alert("Bulk upload failed.");
+    }
+    setCreatingFence(false);
+  };
 
   useEffect(() => {
     loadData();
@@ -1697,6 +1720,7 @@ export default function AdminDashboard() {
                     <form
                       className="risk-form-body"
                       onSubmit={handleCreateGeofence}
+                      encType="multipart/form-data"
                     >
                       <div className="risk-form-grid">
                         <div className="adm-field">
@@ -1811,6 +1835,48 @@ export default function AdminDashboard() {
                           </div>
                         )}
                       </div>
+                      <div className="adm-field adm-field--full">
+                        <label>Bulk Upload Zones (Excel)</label>
+                        <input
+                          type="file"
+                          accept=".xlsx,.xls"
+                          onChange={(e) => setExcelFile(e.target.files[0])}
+                        />
+                        <small>
+                          Upload an Excel file to add multiple zones at once.
+                        </small>
+                      </div>
+                      <button
+                        type="button"
+                        className="risk-submit-btn"
+                        style={{ marginBottom: 8 }}
+                        onClick={handleBulkUpload}
+                        disabled={creatingFence}
+                      >
+                        {creatingFence ? (
+                          <span className="auth-btn-loading">
+                            <span className="auth-spinner" /> Uploading...
+                          </span>
+                        ) : (
+                          <>
+                            <svg
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                              <line x1="12" y1="8" x2="12" y2="16" />
+                              <line x1="8" y1="12" x2="16" y2="12" />
+                            </svg>
+                            Upload Excel File
+                          </>
+                        )}
+                      </button>
                       <button
                         type="submit"
                         className="risk-submit-btn"

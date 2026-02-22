@@ -1,7 +1,8 @@
 from datetime import datetime
 import time
 from typing import Optional
-from fastapi import FastAPI, HTTPException, Depends, Header
+from fastapi import FastAPI, HTTPException, Depends, Header, UploadFile, File
+import pandas as pd
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -14,7 +15,7 @@ from schemas import (
 )
 from auth import (
     generate_tourist_hash, hash_password, verify_password,
-    create_access_token, verify_token
+    create_access_token, verify_token, get_current_admin
 )
 import database
 
@@ -27,7 +28,57 @@ class StatusUpdate(BaseModel):
             "example": {"status": "RESOLVED"}
         }
 
+
 app = FastAPI(title="Smart Tourist Safety SaaS Platform")
+@app.post("/api/admin/geofence/bulk_upload")
+def bulk_upload_geofences(file: UploadFile = File(...), current_user: dict = Depends(get_current_admin)):
+    """Bulk upload geofences from Excel file"""
+    db = database.get_db()
+    if not file.filename.endswith((".xlsx", ".xls")):
+        raise HTTPException(status_code=400, detail="File must be an Excel file (.xlsx or .xls)")
+    try:
+        df = pd.read_excel(file.file)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to read Excel file: {str(e)}")
+
+    required_cols = {"name", "latitude", "longitude", "radius_km", "rating", "description", "organization_id"}
+    if not required_cols.issubset(df.columns):
+        raise HTTPException(status_code=400, detail=f"Excel must contain columns: {', '.join(required_cols)}")
+
+    created = []
+    for _, row in df.iterrows():
+        try:
+            geofence_id = database.get_next_sequence("geofence_id")
+            rating = int(row["rating"])
+            if rating <= 30:
+                zone_type = "safe"
+                risk_level = "low"
+            elif rating <= 70:
+                zone_type = "caution"
+                risk_level = "medium"
+            else:
+                zone_type = "restricted"
+                risk_level = "high"
+            radius_meters = float(row["radius_km"]) * 1000
+            new_geofence = {
+                "id": geofence_id,
+                "name": row["name"],
+                "latitude": float(row["latitude"]),
+                "longitude": float(row["longitude"]),
+                "radius": radius_meters,
+                "organization_id": row["organization_id"],
+                "zone_type": zone_type,
+                "risk_level": risk_level,
+                "rating": rating,
+                "description": row["description"],
+                "created_by": current_user["sub"],
+                "created_at": datetime.utcnow(),
+            }
+            db.geofences.insert_one(new_geofence)
+            created.append(new_geofence["id"])
+        except Exception as e:
+            continue
+    return {"message": f"Bulk upload complete. {len(created)} zones created.", "ids": created}
 
 app.add_middleware(
     CORSMiddleware,
