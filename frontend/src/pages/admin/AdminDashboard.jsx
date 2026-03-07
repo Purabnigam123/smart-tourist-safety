@@ -214,6 +214,7 @@ export default function AdminDashboard() {
   const [zoneSearch, setZoneSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [excelFile, setExcelFile] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleBulkUpload = async () => {
     if (!excelFile) {
@@ -415,9 +416,17 @@ export default function AdminDashboard() {
 
   return (
     <div className="adm-layout">
+      {/* Mobile sidebar overlay */}
+      {sidebarOpen && (
+        <div
+          className="adm-sidebar-overlay adm-sidebar-overlay--visible"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* ── Sidebar ── */}
       <motion.aside
-        className="adm-sidebar"
+        className={`adm-sidebar${sidebarOpen ? " adm-sidebar--open" : ""}`}
         initial={{ x: -40, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -446,7 +455,10 @@ export default function AdminDashboard() {
               <button
                 key={tab.id}
                 className={`adm-nav-item ${activeTab === tab.id ? "adm-nav-item--active" : ""}`}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  setSidebarOpen(false);
+                }}
               >
                 <span className="adm-nav-icon">{tab.icon}</span>
                 <span>{tab.label}</span>
@@ -2210,6 +2222,37 @@ export default function AdminDashboard() {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Mobile sidebar toggle button */}
+      <button
+        className="adm-sidebar-toggle"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          {sidebarOpen ? (
+            <>
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </>
+          ) : (
+            <>
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </>
+          )}
+        </svg>
+      </button>
     </div>
   );
 }

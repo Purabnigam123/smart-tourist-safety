@@ -2446,19 +2446,45 @@ img {
     align-items: center;
     gap: 48px;
   }
+
   .steps-line {
-    top: 0;
-    bottom: 0;
+    display: none;
+  }
+
+  /* Broken line segments between steps */
+  .step-item::after {
+    content: "";
+    position: absolute;
     left: 50%;
-    right: auto;
+    transform: translateX(-50%);
+    bottom: -48px;
+    height: 44px;
     width: 1px;
-    height: auto;
+    z-index: 0;
+  }
+
+  .step-item:last-child::after {
+    display: none;
+  }
+
+  .step-item-blue::after {
     background: linear-gradient(
       180deg,
-      rgba(59, 130, 246, 0.3),
-      rgba(6, 182, 212, 0.3),
-      rgba(239, 68, 68, 0.2)
+      rgba(59, 130, 246, 0.35),
+      rgba(6, 182, 212, 0.35)
     );
+  }
+
+  .step-item-cyan::after {
+    background: linear-gradient(
+      180deg,
+      rgba(6, 182, 212, 0.35),
+      rgba(239, 68, 68, 0.3)
+    );
+  }
+
+  .step-item-red::after {
+    background: none;
   }
 }
 
@@ -2835,7 +2861,7 @@ img {
   padding-top: 60px;
   padding-bottom: 20px;
   position: relative;
-  z-index: 2;
+  z-index: 10;
 }
 
 .scroll-down-link {
@@ -7882,57 +7908,101 @@ img {
 }
 
 /* ============================
+   MOBILE NAV HAMBURGER
+   ============================ */
+
+.nav-hamburger {
+  display: none;
+  background: rgba(3, 7, 18, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 6px;
+  color: var(--text);
+  cursor: pointer;
+  z-index: 120;
+  transition: all 0.3s ease;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nav-hamburger:hover {
+  border-color: rgba(59, 130, 246, 0.3);
+  background: rgba(59, 130, 246, 0.06);
+}
+
+/* Admin sidebar mobile toggle */
+.adm-sidebar-toggle {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 200;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  background: rgba(10, 17, 40, 0.92);
+  backdrop-filter: blur(16px);
+  color: #fbbf24;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+}
+
+.adm-sidebar-toggle:hover {
+  background: rgba(245, 158, 11, 0.12);
+  transform: scale(1.05);
+}
+
+.adm-sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 99;
+}
+
+/* ============================
    RESPONSIVE
    ============================ */
 
+/* ── XL screens (≤1200px) ── */
+@media (max-width: 1200px) {
+  .ov-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .ov-actions-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .numbers-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .footer-top {
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 36px;
+  }
+}
+
+/* ── Large screens / tablets landscape (≤968px) ── */
 @media (max-width: 968px) {
+  /* Landing hero */
   .hero {
     padding: 140px 20px 60px;
-  }
-
-  .dash-topbar-inner {
-    padding: 12px 20px;
-  }
-
-  .dash-topbar-time,
-  .dash-topbar-status {
-    display: none;
-  }
-
-  .dash-status-strip {
-    grid-template-columns: 1fr;
-  }
-
-  .dash-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .dash-card--map {
-    grid-row: span 1;
-  }
-
-  .dash-tips-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .dash-welcome-banner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .dash-welcome-stats {
-    width: 100%;
-    justify-content: flex-start;
-  }
-
-  .dash-quick-actions {
-    grid-template-columns: 1fr 1fr;
   }
 
   .hero-content {
     grid-template-columns: 1fr;
     text-align: center;
+    gap: 40px;
   }
 
   .hero-left {
@@ -7971,69 +8041,88 @@ img {
     bottom: 20px;
   }
 
-  /* Admin dashboard responsive */
+  /* Features */
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Pricing */
+  .pricing-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Tourist dashboard */
+  .dash-topbar-inner {
+    padding: 12px 20px;
+  }
+
+  .dash-topbar-time,
+  .dash-topbar-status {
+    display: none;
+  }
+
+  .dash-status-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-card--map {
+    grid-row: span 1;
+  }
+
+  .dash-tips-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dash-welcome-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 22px 24px;
+  }
+
+  .dash-welcome-stats {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .dash-quick-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Admin dashboard */
+  .adm-sidebar-toggle {
+    display: flex;
+  }
+
   .adm-layout {
     flex-direction: column;
   }
 
   .adm-sidebar {
-    width: 100%;
-    height: auto;
-    position: static;
-    border-right: none;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.06);
-    flex-direction: row;
-    align-items: stretch;
-  }
-
-  .adm-sidebar-top {
-    flex-direction: row;
-    align-items: center;
-    width: 100%;
-    overflow: hidden;
-  }
-
-  .adm-sidebar-brand {
-    border-bottom: none;
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 268px;
+    height: 100vh;
+    z-index: 100;
+    transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     border-right: 1px solid rgba(148, 163, 184, 0.06);
-    padding: 12px 16px;
-    flex-shrink: 0;
+  }
+
+  .adm-sidebar.adm-sidebar--open {
+    left: 0;
+  }
+
+  .adm-sidebar--open + .adm-main .adm-sidebar-overlay,
+  .adm-sidebar-overlay--visible {
+    display: block;
   }
 
   .adm-sidebar-user {
-    display: none;
-  }
-
-  .adm-nav {
-    flex-direction: row;
-    overflow-x: auto;
-    gap: 0;
-    padding: 0;
-    flex: 1;
-  }
-
-  .adm-nav-item {
-    white-space: nowrap;
-    border-left: none;
-    border-bottom: 2.5px solid transparent;
-    padding: 14px 16px;
-    font-size: 0.82rem;
-    gap: 6px;
-  }
-
-  .adm-nav-item--active {
-    border-left-color: transparent;
-    border-bottom-color: var(--accent);
-  }
-
-  .adm-logout-btn {
-    margin: 8px 12px;
-    padding: 8px 12px;
-    border-radius: 8px;
-    flex-shrink: 0;
-  }
-
-  .adm-logout-btn span {
     display: none;
   }
 
@@ -8056,6 +8145,7 @@ img {
   .ov-welcome {
     flex-direction: column;
     align-items: flex-start;
+    gap: 16px;
   }
 
   .ov-welcome-right {
@@ -8089,57 +8179,164 @@ img {
   .adm-header-sub {
     display: none;
   }
+
+  /* Testimonials */
+  .testimonials-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Security grid */
+  .security-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
+/* ── Tablets portrait (≤768px) ── */
 @media (max-width: 768px) {
   .page {
     padding: 20px 16px 48px;
+  }
+
+  .container {
+    gap: 20px;
   }
 
   .map-shell {
     height: 260px;
   }
 
+  /* Navbar mobile */
+  .nav-hamburger {
+    display: flex;
+    z-index: 120;
+    position: relative;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background: rgba(3, 7, 18, 0.97);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    z-index: 110;
+    padding: 80px 32px 60px;
+    overflow-y: auto;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 0.3s ease,
+      visibility 0.3s ease;
+  }
+
+  .nav-links--open {
+    display: flex !important;
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav-link {
+    font-size: 1.15rem;
+    padding: 16px 32px;
+    width: 100%;
+    max-width: 320px;
+    text-align: center;
+    border-radius: var(--radius-md);
+    color: var(--text);
+    border: 1px solid rgba(148, 163, 184, 0.06);
+    transition: background 0.2s ease;
+  }
+
+  .nav-link:hover {
+    background: rgba(59, 130, 246, 0.08);
+  }
+
+  .nav-cta {
+    font-size: 1rem;
+    padding: 16px 32px;
+    width: 100%;
+    max-width: 320px;
+    text-align: center;
+    margin-top: 16px;
+    border-radius: var(--radius-md);
+  }
+
   .nav-container {
     padding: 12px 20px;
   }
 
+  /* Hero */
   .hero {
-    padding: 120px 20px 60px;
+    padding: 120px 20px 40px;
   }
 
+  .hero-title {
+    font-size: clamp(2rem, 7vw, 3rem);
+  }
+
+  .hero-graphic {
+    height: 200px;
+  }
+
+  /* Landing sections */
   .features,
   .how-it-works,
   .pricing,
   .security,
-  .testimonials {
-    padding: 80px 20px;
+  .testimonials,
+  .numbers-section {
+    padding: 60px 20px;
   }
 
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-heading {
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+  }
+
+  .section-subheading {
+    font-size: 0.95rem;
+  }
+
+  /* Grid */
   .grid {
     grid-template-columns: 1fr;
   }
 
-  .security-grid::before {
-    left: 25px;
-  }
-
-  .security-icon-container {
-    width: 46px;
-    height: 46px;
-    margin-left: 4px;
-  }
-
-  .security-icon-inner {
-    width: 36px;
-    height: 36px;
-  }
-
-  .security-item {
-    padding: 20px 16px 20px 0;
+  /* Numbers */
+  .numbers-grid {
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
   }
 
+  .number-card {
+    padding: 32px 20px 28px;
+  }
+
+  /* Security */
+  .security-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Testimonials */
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Destination detail */
   .dest-detail-header {
     flex-direction: column;
   }
@@ -8149,6 +8346,23 @@ img {
     height: 180px;
   }
 
+  .dest-detail-inner {
+    padding: 24px 20px;
+  }
+
+  .dest-detail-name {
+    font-size: 1.25rem;
+  }
+
+  /* Pricing */
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Footer */
   .footer-top {
     grid-template-columns: 1fr 1fr;
     gap: 32px;
@@ -8160,18 +8374,169 @@ img {
     text-align: center;
   }
 
-  .steps-grid {
-    grid-template-columns: 1fr;
-    max-width: 400px;
-    margin: 0 auto;
+  .footer-newsletter {
+    flex-direction: column;
+    text-align: center;
+    gap: 24px;
   }
 
-  .step-arrow {
+  .footer-newsletter-desc {
+    max-width: 100%;
+  }
+
+  .footer-newsletter-form {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .footer-newsletter-input {
+    min-width: auto;
+    width: 100%;
+  }
+
+  /* Steps */
+  .steps-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+  }
+
+  .steps-line {
     display: none;
+  }
+
+  .step-item::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -48px;
+    height: 44px;
+    width: 1px;
+    z-index: 0;
+  }
+
+  .step-item:last-child::after {
+    display: none;
+  }
+
+  .step-item-blue::after {
+    background: linear-gradient(
+      180deg,
+      rgba(59, 130, 246, 0.35),
+      rgba(6, 182, 212, 0.35)
+    );
+  }
+
+  .step-item-cyan::after {
+    background: linear-gradient(
+      180deg,
+      rgba(6, 182, 212, 0.35),
+      rgba(239, 68, 68, 0.3)
+    );
+  }
+
+  .step-item-red::after {
+    background: none;
+  }
+
+  /* Admin dashboard */
+  .adm-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ov-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ov-actions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .adm-header-title {
+    font-size: 1.15rem;
+  }
+
+  /* Risk area */
+  .risk-stats-strip {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .risk-map-wrapper {
+    height: 300px;
+  }
+
+  /* Tourist dashboard */
+  .dash-welcome-title {
+    font-size: 1.2rem;
+  }
+
+  .dash-card--map .map-shell,
+  .dash-map-container {
+    height: 320px;
+    min-height: 320px;
+  }
+
+  /* Auth pages */
+  .auth-page {
+    padding: 24px 16px;
+  }
+
+  .auth-card {
+    padding: 32px 24px;
+  }
+
+  .auth-title {
+    font-size: 1.5rem;
+  }
+
+  /* Final CTA */
+  .final-cta {
+    padding: 60px 20px 80px;
+  }
+
+  .final-cta-title {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+  }
+
+  .final-cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Tables - horizontal scroll */
+  .adm-table-wrap {
+    margin: 0 -22px;
+    padding: 0 22px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .adm-table {
+    min-width: 600px;
+  }
+
+  /* Trusted cards */
+  .trusted-card {
+    flex: 0 0 220px;
+    height: 150px;
+  }
+
+  /* Scroll indicator */
+  .scroll-down-indicator {
+    padding-top: 80px;
+    margin-top: 20px;
   }
 }
 
+/* ── Mobile (≤640px) ── */
 @media (max-width: 640px) {
+  /* Auth */
+  .auth-container {
+    max-width: 100%;
+  }
+
   .auth-container--register {
     max-width: 100%;
   }
@@ -8180,29 +8545,9 @@ img {
     grid-template-columns: 1fr;
   }
 
-  .dash-tips-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .dash-page {
-    padding: 20px 16px 40px;
-  }
-
-  .dash-quick-actions {
-    grid-template-columns: 1fr;
-  }
-
-  .dash-welcome-stats .dash-stat-divider {
-    display: none;
-  }
-
-  .dash-user-avatar {
-    display: none;
-  }
-
   .auth-card {
-    padding: 28px 22px;
-    border-radius: 20px;
+    padding: 24px 18px;
+    border-radius: 18px;
   }
 
   .auth-logo-icon {
@@ -8210,9 +8555,130 @@ img {
     height: 48px;
   }
 
+  .auth-title {
+    font-size: 1.35rem;
+  }
+
+  .auth-subtitle {
+    font-size: 0.82rem;
+  }
+
+  /* Admin login features strip */
+  .admin-login-features {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 16px;
+  }
+
+  .admin-login-feature-divider {
+    display: none;
+  }
+
+  /* Scroll indicator spacing */
+  .scroll-down-indicator {
+    padding-top: 60px;
+    margin-top: 30px;
+  }
+
+  /* Tourist dashboard */
+  .dash-tips-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-page {
+    padding: 16px 12px 36px;
+  }
+
+  .dash-quick-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-welcome-stats {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .dash-welcome-stat-divider {
+    display: none;
+  }
+
+  .dash-user-avatar {
+    display: none;
+  }
+
+  .dash-topbar-inner {
+    padding: 10px 14px;
+  }
+
+  .dash-topbar-title {
+    font-size: 0.95rem;
+  }
+
+  .dash-topbar-sub {
+    font-size: 0.72rem;
+  }
+
+  .dash-logout-btn {
+    padding: 6px 12px;
+    font-size: 0.78rem;
+  }
+
+  .dash-logout-btn span {
+    display: none;
+  }
+
+  .dash-welcome-banner {
+    padding: 18px 16px;
+    border-radius: 14px;
+  }
+
+  .dash-welcome-title {
+    font-size: 1.1rem;
+  }
+
+  .dash-card {
+    padding: 18px 16px;
+    border-radius: 14px;
+  }
+
+  .dash-card--map .map-shell,
+  .dash-map-container {
+    height: 260px;
+    min-height: 260px;
+  }
+
+  .dash-stat-card {
+    padding: 14px 16px;
+  }
+
+  .dash-zone-summary {
+    flex-wrap: wrap;
+  }
+
+  .dash-zone-stat {
+    min-width: 80px;
+  }
+
+  .dash-modal {
+    max-width: 100%;
+    max-height: 90vh;
+    border-radius: 16px;
+  }
+
+  .dash-modal-overlay {
+    padding: 12px;
+  }
+
+  /* Hero */
   .hero-cta {
     flex-direction: column;
     align-items: center;
+    width: 100%;
+  }
+
+  .cta-btn {
+    width: 100%;
+    text-align: center;
   }
 
   .hero-image-stack {
@@ -8225,28 +8691,127 @@ img {
     bottom: -6px;
   }
 
-  .nav-links {
-    gap: 4px;
+  /* Hero badge */
+  .hero-badge {
+    font-size: 0.7rem;
+    padding: 5px 12px 5px 8px;
   }
 
-  .stats-grid {
-    grid-template-columns: 1fr 1fr;
+  /* Hero stats */
+  .hero-stats {
+    flex-wrap: wrap;
+    gap: 16px;
   }
 
+  .hero-stat-divider {
+    display: none;
+  }
+
+  .hero-stat-num {
+    font-size: 1rem;
+  }
+
+  /* Navigation */
+  .nav-container {
+    padding: 10px 16px;
+  }
+
+  .logo-text {
+    font-size: 1.05rem;
+  }
+
+  .logo-icon-wrap {
+    width: 34px;
+    height: 34px;
+  }
+
+  .logo-icon-svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Admin dashboard */
   .adm-stats {
     grid-template-columns: 1fr;
   }
 
+  .adm-stat-card {
+    padding: 16px;
+  }
+
+  .adm-stat-value {
+    font-size: 1.5rem;
+  }
+
   .ov-stats {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ov-stat-card {
+    padding: 14px 16px;
+  }
+
+  .ov-stat-value {
+    font-size: 1.35rem;
   }
 
   .ov-actions-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
   }
 
+  .ov-action-btn {
+    padding: 12px;
+    font-size: 0.78rem;
+  }
+
+  .ov-action-arrow {
+    display: none;
+  }
+
+  .adm-content {
+    padding: 16px 12px;
+  }
+
+  .adm-header {
+    padding: 14px 16px;
+  }
+
+  .adm-header-title {
+    font-size: 1.05rem;
+  }
+
+  .adm-header-badge {
+    font-size: 0.68rem;
+    padding: 4px 10px;
+  }
+
+  .adm-panel-header {
+    padding: 14px 16px;
+  }
+
+  .adm-panel-body {
+    padding: 14px 16px;
+  }
+
+  .adm-table th,
+  .adm-table td {
+    padding: 10px 14px;
+    font-size: 0.82rem;
+  }
+
+  /* Risk area */
   .risk-stats-strip {
     grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .risk-stat-card {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  .risk-stat-value {
+    font-size: 1.1rem;
   }
 
   .risk-form-grid {
@@ -8254,28 +8819,518 @@ img {
   }
 
   .risk-map-wrapper {
-    height: 280px;
+    height: 240px;
+  }
+
+  .risk-form-header {
+    padding: 14px 16px;
+  }
+
+  .risk-form-body {
+    padding: 14px 16px;
+  }
+
+  .risk-list-header {
+    padding: 14px 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .risk-zones-scroll {
+    max-height: 400px;
+    padding: 8px 12px 12px;
   }
 
   .adm-form-grid {
     grid-template-columns: 1fr;
   }
 
-  .features-grid,
-  .pricing-grid {
-    grid-template-columns: 1fr;
+  /* Geofence form */
+  .adm-zone-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
 
+  .adm-zone-details {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .adm-zone-delete {
+    margin-left: 0;
+    align-self: flex-start;
+  }
+
+  /* Footer */
   .footer-top {
     grid-template-columns: 1fr;
     gap: 24px;
   }
 
+  .footer {
+    padding: 20px 16px 24px;
+  }
+
+  .footer-legal {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .footer-socials {
+    justify-content: center;
+  }
+
+  .footer-tagline {
+    max-width: 100%;
+  }
+
+  /* Top bar */
   .topbar-content {
     padding: 12px 16px;
   }
 
-  .footer {
-    padding: 32px 20px 24px;
+  /* Trusted section */
+  .trusted-card {
+    flex: 0 0 180px;
+    height: 130px;
+  }
+
+  .trusted-place {
+    font-size: 0.7rem;
+  }
+
+  .trusted-safety-badge {
+    font-size: 0.55rem;
+    padding: 2px 8px;
+  }
+
+  /* Section tag */
+  .section-tag {
+    font-size: 0.65rem;
+    padding: 5px 14px;
+  }
+
+  /* Section header */
+  .section-header {
+    margin-bottom: 48px;
+  }
+
+  /* Feature cards */
+  .feature-card-inner {
+    padding: 24px 20px;
+  }
+
+  .feature-title {
+    font-size: 1.05rem;
+  }
+
+  /* Security card */
+  .security-card {
+    padding: 28px 24px 24px;
+  }
+
+  /* Testimonial cards */
+  .testimonial-card {
+    padding: 32px 24px 24px;
+  }
+
+  /* Form grid */
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Status strip */
+  .status-strip {
+    grid-template-columns: 1fr;
+  }
+
+  /* Grid */
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Small mobile (≤480px) ── */
+@media (max-width: 480px) {
+  /* Numbers */
+  .numbers-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .number-card {
+    padding: 24px 18px;
+  }
+
+  .number-value {
+    font-size: 1.8rem;
+  }
+
+  /* Hero adjustments */
+  .hero {
+    padding: 100px 16px 40px;
+  }
+
+  .hero-title {
+    font-size: clamp(1.6rem, 8vw, 2.2rem);
+  }
+
+  .hero-subtitle {
+    font-size: 0.92rem;
+  }
+
+  .hero-graphic {
+    height: 180px;
+  }
+
+  .hero-image-main {
+    max-width: 280px;
+  }
+
+  .hero-image-overlay {
+    width: 110px;
+  }
+
+  .hero-float-card {
+    font-size: 0.7rem;
+    padding: 8px 12px;
+    bottom: 10px;
+    left: -10px;
+  }
+
+  /* Stats */
+  .ov-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .ov-actions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .risk-stats-strip {
+    grid-template-columns: 1fr;
+  }
+
+  /* Auth page */
+  .auth-card {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .auth-title {
+    font-size: 1.2rem;
+  }
+
+  .auth-submit-btn {
+    padding: 12px 20px;
+    font-size: 0.88rem;
+  }
+
+  /* Tourist dashboard */
+  .dash-topbar-title {
+    font-size: 0.88rem;
+  }
+
+  .dash-topbar-sub {
+    display: none;
+  }
+
+  .dash-welcome-banner {
+    padding: 14px 12px;
+  }
+
+  .dash-welcome-title {
+    font-size: 1rem;
+  }
+
+  .dash-welcome-sub {
+    font-size: 0.8rem;
+  }
+
+  .dash-card {
+    padding: 14px 12px;
+  }
+
+  .dash-card-title {
+    font-size: 0.92rem;
+  }
+
+  .dash-check-btn {
+    padding: 11px 16px;
+    font-size: 0.85rem;
+  }
+
+  .dash-card--map .map-shell,
+  .dash-map-container {
+    height: 220px;
+    min-height: 220px;
+  }
+
+  /* Map legend */
+  .map-legend {
+    bottom: 8px;
+    right: 8px;
+    padding: 8px 10px;
+    font-size: 0.68rem;
+  }
+
+  .dash-map-overlay-coords {
+    font-size: 0.65rem;
+    padding: 4px 8px;
+  }
+
+  /* Modals */
+  .dash-modal-header {
+    padding: 18px 16px 0;
+  }
+
+  .dash-modal-body {
+    padding: 16px;
+  }
+
+  .dash-modal-title {
+    font-size: 0.95rem;
+  }
+
+  /* Admin dashboard */
+  .adm-content {
+    padding: 12px 10px;
+  }
+
+  .adm-header {
+    padding: 12px 14px;
+  }
+
+  .adm-header-title {
+    font-size: 0.95rem;
+  }
+
+  .ov-welcome-title {
+    font-size: 1.1rem;
+  }
+
+  .ov-welcome-sub {
+    font-size: 0.78rem;
+  }
+
+  /* Risk map */
+  .risk-map-wrapper {
+    height: 200px;
+  }
+
+  .risk-map-legend-overlay {
+    bottom: 10px;
+    left: 10px;
+    padding: 8px 12px;
+    gap: 6px;
+  }
+
+  .risk-legend-row {
+    font-size: 0.7rem;
+  }
+
+  /* Landing trusted */
+  .trusted-label {
+    font-size: 0.7rem;
+    margin-bottom: 28px;
+  }
+
+  .trusted-card {
+    flex: 0 0 160px;
+    height: 110px;
+  }
+
+  /* CTA section */
+  .final-cta {
+    padding: 48px 16px 64px;
+  }
+
+  .final-cta-desc {
+    font-size: 0.92rem;
+  }
+
+  .cta-btn {
+    padding: 12px 28px;
+    font-size: 0.88rem;
+  }
+
+  /* Footer */
+  .footer::before {
+    margin-bottom: 40px;
+  }
+
+  .footer-brand {
+    font-size: 0.95rem;
+  }
+
+  .footer-col-title {
+    font-size: 0.78rem;
+  }
+
+  .footer-col a {
+    font-size: 0.82rem;
+  }
+}
+
+/* ── Tiny screens (≤360px) ── */
+@media (max-width: 360px) {
+  .hero {
+    padding: 90px 12px 32px;
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+  }
+
+  .hero-badge {
+    font-size: 0.65rem;
+  }
+
+  .hero-graphic {
+    display: none;
+  }
+
+  .auth-page {
+    padding: 16px 10px;
+  }
+
+  .auth-card {
+    padding: 18px 14px;
+  }
+
+  .auth-title {
+    font-size: 1.1rem;
+  }
+
+  .dash-page {
+    padding: 12px 8px 28px;
+  }
+
+  .nav-container {
+    padding: 8px 12px;
+  }
+
+  .features,
+  .how-it-works,
+  .pricing,
+  .security,
+  .testimonials,
+  .numbers-section {
+    padding: 40px 14px;
+  }
+
+  .adm-sidebar-toggle {
+    width: 44px;
+    height: 44px;
+    bottom: 14px;
+    right: 14px;
+  }
+}
+
+/* ── Touch & hover behavior ── */
+@media (hover: none) and (pointer: coarse) {
+  /* Disable hover effects on touch devices to prevent sticky hover */
+  .feature-card:hover {
+    transform: none;
+    border-color: rgba(148, 163, 184, 0.06);
+    box-shadow: none;
+  }
+
+  .security-card:hover {
+    transform: none;
+  }
+
+  .number-card:hover {
+    transform: none;
+  }
+
+  .testimonial-card:hover {
+    transform: none;
+  }
+
+  .pricing-card:hover {
+    transform: none;
+  }
+
+  /* Increase tap targets on touch */
+  .nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-cta {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .button {
+    min-height: 44px;
+  }
+
+  .adm-nav-item {
+    min-height: 44px;
+  }
+
+  .dash-quick-btn {
+    min-height: 48px;
+  }
+
+  .dash-city-btn {
+    min-height: 44px;
+  }
+}
+
+/* ── Landscape mobile ── */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero {
+    padding: 80px 20px 40px;
+  }
+
+  .hero-graphic {
+    display: none;
+  }
+
+  .auth-page {
+    padding: 16px;
+  }
+
+  .auth-card {
+    padding: 20px 24px;
+  }
+
+  .scroll-down-indicator {
+    display: none;
+  }
+}
+
+/* ── Print ── */
+@media print {
+  .aurora-bg,
+  .mesh-gradient-layer,
+  .noise-overlay,
+  .floating-elements,
+  .navbar,
+  .nav-hamburger,
+  .footer,
+  .scroll-down-indicator,
+  .adm-sidebar,
+  .adm-sidebar-toggle,
+  .dash-topbar {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .landing,
+  .dashboard-layout,
+  .auth-page {
+    background: #fff;
   }
 }

@@ -11,6 +11,7 @@ export default function LandingPage() {
   const [selectedDest, setSelectedDest] = useState(null);
   const [expandedFeature, setExpandedFeature] = useState(null);
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -89,24 +90,69 @@ export default function LandingPage() {
             <span className="logo-text">Turosafe</span>
           </motion.div>
           <motion.div
-            className="nav-links"
+            className={`nav-links${menuOpen ? " nav-links--open" : ""}`}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
           >
-            <a href="#features" className="nav-link">
+            <a
+              href="#features"
+              className="nav-link"
+              onClick={() => setMenuOpen(false)}
+            >
               Features
             </a>
-            <a href="#how-it-works" className="nav-link">
+            <a
+              href="#how-it-works"
+              className="nav-link"
+              onClick={() => setMenuOpen(false)}
+            >
               How It Works
             </a>
-            <a href="#security" className="nav-link">
+            <a
+              href="#security"
+              className="nav-link"
+              onClick={() => setMenuOpen(false)}
+            >
               Security
             </a>
-            <Link to="/tourist/login" className="nav-cta">
+            <Link
+              to="/tourist/login"
+              className="nav-cta"
+              onClick={() => setMenuOpen(false)}
+            >
               Tourist Login
             </Link>
           </motion.div>
+          <button
+            className="nav-hamburger"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+          >
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              {menuOpen ? (
+                <>
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </>
+              ) : (
+                <>
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                </>
+              )}
+            </svg>
+          </button>
         </div>
       </nav>
 
