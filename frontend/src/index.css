@@ -3,6 +3,7 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
 }
 
 /* ============================
@@ -86,6 +87,8 @@ body {
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

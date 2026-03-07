@@ -21,7 +21,21 @@ export default function LandingPage() {
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 80]);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    let ticking = false;
+
+    const updateScrollState = () => {
+      const isScrolled = window.scrollY > 20;
+      setScrolled((prev) => (prev === isScrolled ? prev : isScrolled));
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(updateScrollState);
+    };
+
+    updateScrollState();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
